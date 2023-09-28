@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import ProductCharacteristicEntity from './product-characteristic.entity';
 import ProductImageEntity from './product-image.entity';
+import OrderItemEntity from 'src/order/orderItem.entity';
 
 @Entity({ name: 'products' })
 export default class ProductEntity {
@@ -29,9 +30,6 @@ export default class ProductEntity {
 
 	@Column({ name: 'category', length: 100, nullable: false })
 	category: string;
-
-	@Column({ name: 'user_id', nullable: false })
-	userId: string;
 
 	@OneToMany(() => ProductImageEntity, (productImage) => productImage.product, {
 		cascade: true,
@@ -54,4 +52,7 @@ export default class ProductEntity {
 
 	@DeleteDateColumn({ name: 'deleted_at' })
 	deletedAt: string;
+
+	@OneToMany(() => OrderItemEntity, (orderItem) => orderItem.product)
+	orderItems: OrderItemEntity[];
 }

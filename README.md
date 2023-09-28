@@ -42,8 +42,11 @@ Start Docker in your machine and:
 ## up containers
 ❯ docker compose up -d
 
+## run migrations
+❯ npm run typeorm:run
+
 ## start the project
-npm run start:dev
+❯ npm run start:dev
 ```
 
 [url-local](http://localhost:3000)

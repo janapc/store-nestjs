@@ -4,12 +4,10 @@ import {
 	IsInt,
 	IsNotEmpty,
 	IsNumber,
-	IsUUID,
 	ValidateNested,
 } from 'class-validator';
 import ImageDTO from './image.dto';
 import CharacteristicDTO from './characteristic.dto';
-import { UserIdExists } from '../validation/userIdExists.validator';
 
 export default class CreateProductDTO {
 	@IsNotEmpty({ message: 'O campo name não pode ser vazio' })
@@ -33,11 +31,6 @@ export default class CreateProductDTO {
 
 	@IsNotEmpty({ message: 'O campo category não pode ser vazio' })
 	category: string;
-
-	@IsNotEmpty({ message: 'O campo userId não pode ser vazio' })
-	@IsUUID()
-	@UserIdExists({ message: 'usuário não encontrado' })
-	userId: string;
 
 	@ValidateNested()
 	@IsArray()

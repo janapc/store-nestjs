@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ListUsersDTO, UpdateUserDTO } from './dto';
+import { CreateUserDTO, ListUsersDTO, UpdateUserDTO } from './dto';
 import UserEntity from './user.entity';
 
 @Injectable()
@@ -17,31 +17,35 @@ export class UserService {
 		return users;
 	}
 
-	async save(user: UserEntity) {
-		await this.userRepository.save(user);
+	async save(user: CreateUserDTO) {
+		const userEntity = new UserEntity();
+		Object.assign(userEntity, user as UserEntity);
+		return this.userRepository.save(userEntity);
 	}
 
 	async findById(id: string) {
-		return this.userRepository.findOneBy({
+		const user = await this.userRepository.findOneBy({
 			id,
 		});
+		if (!user) throw new NotFoundException('Usuário não encontrado');
+		return user;
 	}
 
 	async findByEmail(email: string) {
-		return this.userRepository.findOneBy({
+		const user = await this.userRepository.findOneBy({
 			email,
 		});
+		return user;
 	}
 
 	async update(id: string, user: UpdateUserDTO) {
-		const hasUser = await this.findById(id);
-		if (!hasUser) throw new Error('Usuário não existe');
-		await this.userRepository.update(id, user);
+		const userEntity = await this.findById(id);
+		Object.assign(userEntity, user as UserEntity);
+		await this.userRepository.save(userEntity);
 	}
 
 	async delete(id: string) {
-		const hasUser = await this.findById(id);
-		if (!hasUser) throw new Error('Usuário não existe');
+		await this.findById(id);
 		await this.userRepository.delete(id);
 	}
 }

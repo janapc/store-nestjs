@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import CreateProductDTO from './dto/createProduct.dto';
 import { ProductService } from './product.service';
-import ProductEntity from './entities/product.entity';
 import UpdateProductDTO from './dto/updateProduct.dto';
 
 @Controller('/product')
@@ -18,10 +17,8 @@ export default class ProductController {
 
 	@Post()
 	async createProduct(@Body() data: CreateProductDTO) {
-		const product = new ProductEntity();
-		Object.assign(product, data);
-		await this.productService.create(product);
-		return { message: 'produto cadastrado com sucesso', id: product.id };
+		const product = await this.productService.create(data);
+		return { id: product.id, message: 'produto cadastrado com sucesso' };
 	}
 
 	@Get()
@@ -31,15 +28,13 @@ export default class ProductController {
 
 	@Put('/:id')
 	async updateProduct(@Param('id') id: string, @Body() data: UpdateProductDTO) {
-		const product = new ProductEntity();
-		Object.assign(product, data);
-		await this.productService.update(id, product);
-		return { message: 'produto atualizado com sucesso', id };
+		await this.productService.update(id, data);
+		return { id, message: 'produto atualizado com sucesso' };
 	}
 
 	@Delete('/:id')
 	async deleteProduct(@Param('id') id: string) {
 		await this.productService.delete(id);
-		return { message: 'produto deletado com sucesso', id };
+		return { id, message: 'produto deletado com sucesso' };
 	}
 }

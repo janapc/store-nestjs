@@ -7,7 +7,6 @@ import {
 	Param,
 	Delete,
 } from '@nestjs/common';
-import UserEntity from './user.entity';
 import { UpdateUserDTO, CreateUserDTO } from './dto';
 import { UserService } from './user.service';
 
@@ -17,12 +16,8 @@ export default class UserController {
 
 	@Post()
 	async createUser(@Body() userDTO: CreateUserDTO) {
-		const user = new UserEntity();
-		user.email = userDTO.email;
-		user.password = userDTO.password;
-		user.name = userDTO.name;
-		await this.userService.save(user);
-		return { message: 'usuário cadastrado com sucesso', id: user.id };
+		const user = await this.userService.save(userDTO);
+		return { id: user.id, message: 'usuário cadastrado com sucesso' };
 	}
 
 	@Get()
@@ -32,8 +27,8 @@ export default class UserController {
 	}
 
 	@Put('/:id')
-	async updateUser(@Param('id') id: string, @Body() data: UpdateUserDTO) {
-		await this.userService.update(id, data);
+	async updateUser(@Param('id') id: string, @Body() userDTO: UpdateUserDTO) {
+		await this.userService.update(id, userDTO);
 		return {
 			id,
 			message: 'Usuário atualizado com sucesso',
@@ -41,7 +36,7 @@ export default class UserController {
 	}
 
 	@Delete('/:id')
-	async removeUser(@Param('id') id: string) {
+	async deleteUser(@Param('id') id: string) {
 		await this.userService.delete(id);
 		return {
 			id,

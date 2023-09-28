@@ -5,7 +5,9 @@ import {
 	UpdateDateColumn,
 	DeleteDateColumn,
 	PrimaryGeneratedColumn,
+	OneToMany,
 } from 'typeorm';
+import OrderEntity from '../order/order.entity';
 
 @Entity({ name: 'users' })
 export default class UserEntity {
@@ -29,4 +31,7 @@ export default class UserEntity {
 
 	@DeleteDateColumn({ name: 'deleted_at' })
 	deletedAt: string;
+
+	@OneToMany(() => OrderEntity, (order) => order.user)
+	orders: OrderEntity[];
 }
