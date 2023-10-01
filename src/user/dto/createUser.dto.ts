@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
 import { EmailExists } from '../validation/emailExists.validator';
 
 export default class CreateUserDTO {
@@ -9,8 +9,9 @@ export default class CreateUserDTO {
 	@EmailExists({ message: 'já existe um usuário com esse email' })
 	email: string;
 
-	@MinLength(6, {
-		message: 'O campo password precisa ter pelo menos 6 caractéres',
+	@Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W+)(.{6,30})$/, {
+		message:
+			'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um dígito, um caractere especial e ter entre 8 e 30 caracteres',
 	})
 	@IsNotEmpty({ message: 'O campo password não pode ser vazio' })
 	password: string;

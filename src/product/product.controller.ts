@@ -3,17 +3,25 @@ import {
 	Controller,
 	Delete,
 	Get,
+	Inject,
 	Param,
 	Post,
 	Put,
+	UseInterceptors,
 } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { CacheInterceptor, CACHE_MANAGER } from '@nestjs/cache-manager';
 import CreateProductDTO from './dto/createProduct.dto';
 import { ProductService } from './product.service';
 import UpdateProductDTO from './dto/updateProduct.dto';
+import ProductEntity from './entities/product.entity';
 
 @Controller('/product')
 export default class ProductController {
-	constructor(private productService: ProductService) {}
+	constructor(
+		private productService: ProductService,
+		@Inject(CACHE_MANAGER) private managerCache: Cache,
+	) {}
 
 	@Post()
 	async createProduct(@Body() data: CreateProductDTO) {
@@ -22,8 +30,23 @@ export default class ProductController {
 	}
 
 	@Get()
+	@UseInterceptors(CacheInterceptor)
 	async listProducts() {
-		return this.productService.list();
+		const products = await this.productService.list();
+		return products;
+	}
+
+	@Get('/:id')
+	async findProductById(@Param('id') id: string) {
+		let product = await this.managerCache.get<ProductEntity>(`product-${id}`);
+		if (!product) {
+			product = await this.productService.findById(id);
+			await this.managerCache.set(`product-${id}`, product);
+		}
+		return {
+			product,
+			message: 'produto encontrado',
+		};
 	}
 
 	@Put('/:id')

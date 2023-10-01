@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	ForbiddenException,
 	Injectable,
 	NotFoundException,
 } from '@nestjs/common';
@@ -10,7 +11,7 @@ import UserEntity from '../user/user.entity';
 import { StatusOrder } from './enum/statusOrder.enum';
 import { CreateOrderDTO } from './dto/createOrder.dto';
 import OrderItemEntity from './orderItem.entity';
-import ProductEntity from 'src/product/entities/product.entity';
+import ProductEntity from '../product/entities/product.entity';
 import { UpdateOrderDTO } from './dto/updateOrder.dto';
 
 @Injectable()
@@ -94,14 +95,22 @@ export class OrderService {
 		});
 	}
 
-	private async findById(id: string) {
-		const order = await this.orderRepository.findOneBy({ id });
+	private async findById(orderId: string) {
+		const order = await this.orderRepository.findOne({
+			where: { id: orderId },
+			relations: { user: true },
+		});
 		if (!order) throw new NotFoundException('O pedido não foi encontrado');
 		return order;
 	}
 
-	async updateOrder(id: string, order: UpdateOrderDTO) {
-		const orderEntity = await this.findById(id);
+	async updateOrder(userId: string, orderId: string, order: UpdateOrderDTO) {
+		const orderEntity = await this.findById(orderId);
+		if (orderEntity.user.id !== userId) {
+			throw new ForbiddenException(
+				'Você não tem autorização para atualizar esse pedido',
+			);
+		}
 		Object.assign(orderEntity, order as OrderEntity);
 		await this.orderRepository.save(orderEntity);
 	}

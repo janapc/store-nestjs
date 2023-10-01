@@ -9,5 +9,6 @@ import { EmailExistsValidator } from './validation/emailExists.validator';
 	imports: [TypeOrmModule.forFeature([UserEntity])],
 	controllers: [UserController],
 	providers: [EmailExistsValidator, UserService],
+	exports: [UserService],
 })
 export class UserModule {}

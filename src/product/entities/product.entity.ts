@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import ProductCharacteristicEntity from './product-characteristic.entity';
 import ProductImageEntity from './product-image.entity';
-import OrderItemEntity from 'src/order/orderItem.entity';
+import OrderItemEntity from '../../order/orderItem.entity';
 
 @Entity({ name: 'products' })
 export default class ProductEntity {

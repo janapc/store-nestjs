@@ -7,6 +7,7 @@ import {
 	PrimaryGeneratedColumn,
 	OneToMany,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import OrderEntity from '../order/order.entity';
 
 @Entity({ name: 'users' })
@@ -20,6 +21,7 @@ export default class UserEntity {
 	@Column({ name: 'email', length: 70, nullable: false })
 	email: string;
 
+	@Exclude()
 	@Column({ name: 'password', length: 255, nullable: false })
 	password: string;
 

@@ -9,14 +9,21 @@ import {
 } from '@nestjs/common';
 import { UpdateUserDTO, CreateUserDTO } from './dto';
 import { UserService } from './user.service';
+import { HashPassword } from '../pipes/hash-password';
 
 @Controller('/user')
 export default class UserController {
 	constructor(private userService: UserService) {}
 
 	@Post()
-	async createUser(@Body() userDTO: CreateUserDTO) {
-		const user = await this.userService.save(userDTO);
+	async createUser(
+		@Body() { password, ...userDTO }: CreateUserDTO,
+		@Body('password', HashPassword) hashPassword: string,
+	) {
+		const user = await this.userService.save({
+			...userDTO,
+			password: hashPassword,
+		});
 		return { id: user.id, message: 'usuário cadastrado com sucesso' };
 	}
 

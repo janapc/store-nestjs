@@ -26,12 +26,15 @@ To this project your need to have:
 In this project your need create a file **.env** and put your config database.
 
 ```yml
-DB_HOST=
-DB_PORT=
-DB_USERNAME=
-DB_PASSWORD=
-DB_NAME=
-DB_ADMIN_EMAIL=
+DB_HOST= ##database host
+DB_PORT= ##database port
+DB_USERNAME= ##database username
+DB_PASSWORD= ##database password
+DB_NAME= ##database name
+DB_ADMIN_EMAIL= ##database access email
+SALT_PASSWORD= ##salt password
+SECRET_JWT= ##jwt secret
+
 ```
 
 ## Run Project
