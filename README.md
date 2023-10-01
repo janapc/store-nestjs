@@ -7,7 +7,7 @@
 <a href="#project">Project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 <a href="#requirement">Requirement</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 <a href="#run-project">Run Project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-<a href="#request-api">Request API</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+<a href="#api-documentation">API Documentation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 <a href="#technologies">Technologies</a>
 
 </div>
@@ -52,7 +52,9 @@ Start Docker in your machine and:
 ❯ npm run start:dev
 ```
 
-[url-local](http://localhost:3000)
+## API Documentation
+
+[api-doc-url-local](http://localhost:3000/api)
 
 ## Technologies
 
@@ -60,6 +62,7 @@ Start Docker in your machine and:
 - typeorm
 - postgres
 - typescript
+- swagger
 
 <div align="center">
 
